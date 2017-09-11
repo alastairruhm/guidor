@@ -97,6 +97,7 @@ func GetUserHomeDir() (string, error) {
 	return user.HomeDir, nil
 }
 
+// GetWorkDir yields guidor client working directory
 func GetWorkDir() (string, error) {
 	userDir, err := GetUserHomeDir()
 	if err != nil {
