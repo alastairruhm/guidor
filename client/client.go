@@ -46,7 +46,7 @@ type Client struct {
 	Rate Rate
 
 	// Services used for communicating with the API
-	Instances InstancesService
+	Databases DatabasesService
 	// Actions           ActionsService
 	// Domains           DomainsService
 	// Droplets          DropletsService
@@ -157,25 +157,7 @@ func NewClient(httpClient *http.Client) *Client {
 	baseURL, _ := url.Parse(defaultBaseURL)
 
 	c := &Client{client: httpClient, BaseURL: baseURL, UserAgent: userAgent}
-	c.Instances = &InstancesServiceOp{client: c}
-	// c.Actions = &ActionsServiceOp{client: c}
-	// c.Domains = &DomainsServiceOp{client: c}
-	// c.Droplets = &DropletsServiceOp{client: c}
-	// c.DropletActions = &DropletActionsServiceOp{client: c}
-	// c.FloatingIPs = &FloatingIPsServiceOp{client: c}
-	// c.FloatingIPActions = &FloatingIPActionsServiceOp{client: c}
-	// c.Images = &ImagesServiceOp{client: c}
-	// c.ImageActions = &ImageActionsServiceOp{client: c}
-	// c.Keys = &KeysServiceOp{client: c}
-	// c.Regions = &RegionsServiceOp{client: c}
-	// c.Snapshots = &SnapshotsServiceOp{client: c}
-	// c.Sizes = &SizesServiceOp{client: c}
-	// c.Storage = &StorageServiceOp{client: c}
-	// c.StorageActions = &StorageActionsServiceOp{client: c}
-	// c.Tags = &TagsServiceOp{client: c}
-	// c.LoadBalancers = &LoadBalancersServiceOp{client: c}
-	// c.Certificates = &CertificatesServiceOp{client: c}
-	// c.Firewalls = &FirewallsServiceOp{client: c}
+	c.Databases = &DatabasesServiceOp{client: c}
 
 	return c
 }

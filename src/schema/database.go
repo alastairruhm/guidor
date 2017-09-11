@@ -39,6 +39,7 @@ func (d Database) Result() *DatabaseResult {
 	return &DatabaseResult{
 		ID:        d.ID.String(),
 		IP:        d.IP,
+		Token:     d.Token,
 		Hostname:  d.Hostname,
 		DbType:    d.DbType,
 		DbVersion: d.DbVersion,
@@ -52,6 +53,7 @@ func (d Database) Result() *DatabaseResult {
 type DatabaseResult struct {
 	ID        string    `json:"id"`
 	IP        string    `json:"ip"`
+	Token     string    `json:"token"`
 	Hostname  string    `json:"hostname"`
 	DbType    string    `json:"db_type"`
 	DbVersion string    `json:"db_version"`
