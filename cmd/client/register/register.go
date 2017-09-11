@@ -47,6 +47,5 @@ func registerClient(cmd *cobra.Command, args []string) {
 		log.Fatal(err)
 		return
 	}
-	log.Info("Token: ", (*database).Token)
-	// log.Info("%+v", instance)
+	log.Infof("Token: %s", database.Token)
 }

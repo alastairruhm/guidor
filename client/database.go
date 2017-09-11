@@ -88,7 +88,7 @@ type databaseRoot struct {
 func (s *DatabasesServiceOp) Register(ctx context.Context, d schema.Database) (*schema.DatabaseResult, *Response, error) {
 
 	path := fmt.Sprintf("%s", databasesBasePath)
-	req, err := s.client.NewRequest(ctx, http.MethodPost, path, nil)
+	req, err := s.client.NewRequest(ctx, http.MethodPost, path, &d)
 	if err != nil {
 		return nil, nil, err
 	}

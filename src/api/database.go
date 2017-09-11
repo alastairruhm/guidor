@@ -67,5 +67,5 @@ func (a *Database) Register(ctx *gear.Context) error {
 	if err != nil {
 		return gear.ErrInternalServerError.From(err)
 	}
-	return ctx.JSON(200, res)
+	return ctx.JSON(200, map[string]schema.DatabaseResult{"database": *res})
 }
