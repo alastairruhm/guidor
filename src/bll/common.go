@@ -2,7 +2,6 @@ package bll
 
 import (
 	"github.com/alastairruhm/guidor/src/model"
-	"github.com/alastairruhm/guidor/src/service"
 )
 
 // Bll is Business Logic Layer with all models
@@ -12,18 +11,14 @@ type Bll struct {
 
 // All ...
 type All struct {
-	Models *model.All
-	Team   *Team
-	Entry  *Entry
-	Secret *Secret
+	Models   *model.All
+	Database *Database
 }
 
 // Init ...
-func (a *All) Init(db *service.DB) *All {
-	a.Models = new(model.All).Init(db)
+func (a *All) Init() *All {
+	a.Models = new(model.All).Init()
 	b := &Bll{a.Models}
-	a.Team = &Team{b}
-	a.Entry = &Entry{b}
-	a.Secret = &Secret{b}
+	a.Database = &Database{b}
 	return a
 }

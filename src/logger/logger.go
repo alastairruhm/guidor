@@ -17,7 +17,7 @@ func Default() *logging.Logger {
 
 // Init ...
 func Init() {
-	std.SetLevel(logging.InfoLevel)
+	std.SetLevel(logging.DebugLevel)
 }
 
 // FromCtx ...
