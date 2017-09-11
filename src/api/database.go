@@ -51,14 +51,19 @@ func (t *tplDatabaseCreate) Validate() error {
 // @Failure 401 string
 // @Router POST /api/databases
 func (a *Database) Register(ctx *gear.Context) error {
-	body := new(tplDatabaseCreate)
-	if err := ctx.ParseBody(body); err != nil {
+	b := new(tplDatabaseCreate)
+	if err := ctx.ParseBody(b); err != nil {
 		return gear.ErrBadRequest.From(err)
 	}
 
 	res, err := a.databaseBll.Register(&schema.Database{
-		DbName: body.DbName,
+		IP:        b.IP,
+		Hostname:  b.Hostname,
+		DbVersion: b.DbVersion,
+		DbType:    b.DbType,
+		DbName:    b.DbName,
 	})
+
 	if err != nil {
 		return gear.ErrInternalServerError.From(err)
 	}
