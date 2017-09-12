@@ -63,10 +63,10 @@ func initConfig() {
 	err := viper.ReadInConfig()
 
 	if err != nil {
-		fmt.Println("config file parse error")
+		log.Error("config file parse error")
 		panic(err)
 	}
-	fmt.Println("using config file", viper.ConfigFileUsed())
+	log.Info("read config file", viper.ConfigFileUsed())
 }
 
 // log output to stdout and file both
