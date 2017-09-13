@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/alastairruhm/guidor/client"
+	"github.com/alastairruhm/guidor/db"
 	"github.com/alastairruhm/guidor/src/schema"
 	logging "github.com/op/go-logging"
 	"github.com/spf13/cobra"
@@ -18,11 +19,12 @@ import (
 var (
 	// ip          string
 	// hostname string
-	dbuser string
-	dbpass string
-	dbname string
-	dbhost string
-	dbport string
+	dbUser string
+	dbPass string
+	dbName string
+	dbHost string
+	dbPort string
+	dbType string
 	// dbtype      string
 	// dbversion   string
 	// serviceName string
@@ -32,11 +34,12 @@ var log = logging.MustGetLogger("guidor")
 
 func init() {
 	// Cmd.Flags().StringVarP(&ip, "ip", "", "", "guidor client ip")
-	Cmd.Flags().StringVarP(&dbuser, "dbuser", "", "", "database user")
-	Cmd.Flags().StringVarP(&dbpass, "dbpass", "", "", "database password")
-	Cmd.Flags().StringVarP(&dbname, "dbname", "", "", "database name")
-	Cmd.Flags().StringVarP(&dbhost, "dbhost", "", "127.0.0.1", "database name")
-	Cmd.Flags().StringVarP(&dbport, "dbport", "", "3306", "database name")
+	Cmd.Flags().StringVarP(&dbUser, "dbuser", "", "", "database user")
+	Cmd.Flags().StringVarP(&dbPass, "dbpass", "", "", "database password")
+	Cmd.Flags().StringVarP(&dbName, "dbname", "", "", "database name")
+	Cmd.Flags().StringVarP(&dbHost, "dbhost", "", "127.0.0.1", "database name")
+	Cmd.Flags().StringVarP(&dbPort, "dbport", "", "", "database name")
+	Cmd.Flags().StringVarP(&dbType, "dbtype", "", "", "database type")
 }
 
 // Cmd Register
@@ -50,12 +53,24 @@ var Cmd = &cobra.Command{
 
 func registerClient(cmd *cobra.Command, args []string) {
 	// check database connection with dsn params
-	err := CheckDBConnection(dbuser, dbpass, dbhost, dbport)
+	config := db.DatabaseConfig{
+		Username: dbUser,
+		Password: dbPass,
+		Database: dbName,
+		Host:     dbHost,
+		Port:     dbPort,
+	}
+	database, err := db.NewMySQL(config)
+	defer database.Close()
+
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
+
 	log.Info("check database authentication success")
+
+	// collect database version
 	c := client.NewClient(nil)
 	ctx := context.TODO()
 
