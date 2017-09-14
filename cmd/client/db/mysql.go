@@ -3,17 +3,19 @@ package db
 import (
 	"database/sql"
 	"fmt"
-	"log"
 )
 
 // MySQL ...
 type MySQL struct {
-	config   DatabaseConfig
+	config   Config
 	DBClient *sql.DB
 }
 
+// ensure MySQL impl Base
+var _ Base = &MySQL{}
+
 // NewMySQL ...
-func NewMySQL(c DatabaseConfig) (*MySQL, error) {
+func NewMySQL(c Config) (*MySQL, error) {
 	var mysql MySQL
 	mysql.config = c
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/?timeout=5s", c.Username, c.Password, c.Host, c.Port)
@@ -30,7 +32,6 @@ func (ctx *MySQL) Version() (string, error) {
 	var version string
 	err := ctx.DBClient.QueryRow("SELECT VERSION() as verion;").Scan(&version)
 	if err != nil {
-		log.Fatal(err)
 		return "", err
 	}
 	return version, nil
@@ -45,6 +46,12 @@ func (ctx *MySQL) Type() string {
 func (ctx *MySQL) Auth() error {
 	err := ctx.DBClient.Ping()
 	return err
+}
+
+// Backup ...
+func (ctx *MySQL) Backup() error {
+	fmt.Println("do backup")
+	return nil
 }
 
 // Close ...

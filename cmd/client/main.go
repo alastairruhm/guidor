@@ -34,7 +34,7 @@ func init() {
 		fmt.Println(err)
 		panic(err)
 	}
-	rootCmd.PersistentFlags().StringVarP(&rootFlags.configFile, "config", "c", path.Join(dir, "config.toml"), "configuration file, default is config.toml")
+	rootCmd.PersistentFlags().StringVarP(&rootFlags.configFile, "config", "c", path.Join(dir, "config.yaml"), "configuration file, default is config.yaml")
 }
 
 var rootCmd = &cobra.Command{

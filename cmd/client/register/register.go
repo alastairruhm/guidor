@@ -2,13 +2,12 @@ package register
 
 import (
 	"context"
-	"database/sql"
-	"fmt"
 	"net"
 	"os"
 
 	"github.com/alastairruhm/guidor/client"
-	"github.com/alastairruhm/guidor/db"
+	"github.com/alastairruhm/guidor/cmd/client/db"
+	"github.com/alastairruhm/guidor/cmd/client/er"
 	"github.com/alastairruhm/guidor/src/schema"
 	logging "github.com/op/go-logging"
 	"github.com/spf13/cobra"
@@ -17,17 +16,12 @@ import (
 )
 
 var (
-	// ip          string
-	// hostname string
 	dbUser string
 	dbPass string
 	dbName string
 	dbHost string
 	dbPort string
 	dbType string
-	// dbtype      string
-	// dbversion   string
-	// serviceName string
 )
 
 var log = logging.MustGetLogger("guidor")
@@ -53,40 +47,59 @@ var Cmd = &cobra.Command{
 
 func registerClient(cmd *cobra.Command, args []string) {
 	// check database connection with dsn params
-	config := db.DatabaseConfig{
+	config := db.Config{
 		Username: dbUser,
 		Password: dbPass,
 		Database: dbName,
 		Host:     dbHost,
 		Port:     dbPort,
+		Type:     dbType,
 	}
-	database, err := db.NewMySQL(config)
-	defer database.Close()
 
+	database, err := db.New(config)
 	if err != nil {
-		log.Fatal(err)
+		log.Error(err)
 		return
 	}
+	// Check error of Close for db
+	defer func() {
+		if cerr := database.Close(); err == nil {
+			err = cerr
+		}
+	}()
 
+	// check authentication
+	err = database.Auth()
+
+	if err != nil {
+		log.Error(er.ErrDBAuthentication)
+		return
+	}
 	log.Info("check database authentication success")
 
-	// collect database version
+	// collect database information
+	version, err := database.Version()
+	if err != nil {
+		log.Error(err)
+		return
+	}
+	log.Info("check database version success")
+
 	c := client.NewClient(nil)
 	ctx := context.TODO()
 
 	d := schema.Database{
 		IP:        GetLocalIP(),
 		Hostname:  MustHostName(),
-		DbType:    "mysql",
-		DbVersion: "5.5",
-		DbName:    "test",
+		DbType:    database.Type(),
+		DbVersion: version,
 	}
-	database, _, err := c.Databases.Register(ctx, d)
+	i, _, err := c.Databases.Register(ctx, d)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
-	log.Infof("Token: %s", database.Token)
+	log.Infof("Token: %s", i.Token)
 }
 
 // GetLocalIP returns the non loopback local IP of the host
@@ -113,17 +126,4 @@ func MustHostName() string {
 		return ""
 	}
 	return n
-}
-
-// CheckDBConnection ...
-func CheckDBConnection(dbuser string, dbpasswd string, host string, port string) error {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/?timeout=5s", dbuser, dbpasswd, host, port)
-	db, err := sql.Open("mysql", dsn)
-	defer db.Close()
-	if err != nil {
-		// log.Fatal(err)
-		return err
-	}
-	err = db.Ping()
-	return err
 }
