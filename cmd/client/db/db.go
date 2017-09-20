@@ -48,5 +48,4 @@ func New(c Config) (Base, error) {
 		return nil, er.ErrNotSupported
 	}
 	return ctx, nil
-
 }
