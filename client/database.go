@@ -1,7 +1,6 @@
 package client
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/alastairruhm/guidor/src/schema"
@@ -33,9 +32,9 @@ type DatabasesServiceOp struct {
 
 var _ DatabasesService = &DatabasesServiceOp{}
 
-type databasesRoot struct {
-	Databases []schema.DatabaseResult `json:"databases"`
-}
+// type databasesRoot struct {
+// 	Databases []schema.DatabaseResult `json:"databases"`
+// }
 
 type databaseRoot struct {
 	Database *schema.DatabaseResult `json:"database"`
@@ -87,8 +86,8 @@ type databaseRoot struct {
 // Register an database by ID.
 func (s *DatabasesServiceOp) Register(ctx context.Context, d schema.Database) (*schema.DatabaseResult, *Response, error) {
 
-	path := fmt.Sprintf("%s", databasesBasePath)
-	req, err := s.client.NewRequest(ctx, http.MethodPost, path, &d)
+	// path := fmt.Sprintf("%s", databasesBasePath)
+	req, err := s.client.NewRequest(ctx, http.MethodPost, databasesBasePath, &d)
 	if err != nil {
 		return nil, nil, err
 	}

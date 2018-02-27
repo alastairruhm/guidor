@@ -8,11 +8,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
-	"reflect"
 	"strconv"
 	"time"
 
-	"github.com/google/go-querystring/query"
 	headerLink "github.com/tent/http-link-go"
 
 	"github.com/alastairruhm/guidor/client/context"
@@ -121,32 +119,32 @@ type Rate struct {
 	Reset Timestamp `json:"reset"`
 }
 
-func addOptions(s string, opt interface{}) (string, error) {
-	v := reflect.ValueOf(opt)
+// func addOptions(s string, opt interface{}) (string, error) {
+// 	v := reflect.ValueOf(opt)
 
-	if v.Kind() == reflect.Ptr && v.IsNil() {
-		return s, nil
-	}
+// 	if v.Kind() == reflect.Ptr && v.IsNil() {
+// 		return s, nil
+// 	}
 
-	origURL, err := url.Parse(s)
-	if err != nil {
-		return s, err
-	}
+// 	origURL, err := url.Parse(s)
+// 	if err != nil {
+// 		return s, err
+// 	}
 
-	origValues := origURL.Query()
+// 	origValues := origURL.Query()
 
-	newValues, err := query.Values(opt)
-	if err != nil {
-		return s, err
-	}
+// 	newValues, err := query.Values(opt)
+// 	if err != nil {
+// 		return s, err
+// 	}
 
-	for k, v := range newValues {
-		origValues[k] = v
-	}
+// 	for k, v := range newValues {
+// 		origValues[k] = v
+// 	}
 
-	origURL.RawQuery = origValues.Encode()
-	return origURL.String(), nil
-}
+// 	origURL.RawQuery = origValues.Encode()
+// 	return origURL.String(), nil
+// }
 
 // NewClient returns a new guidor API client.
 func NewClient(httpClient *http.Client) *Client {

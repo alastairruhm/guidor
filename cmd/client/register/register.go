@@ -9,8 +9,9 @@ import (
 	"github.com/alastairruhm/guidor/cmd/client/db"
 	"github.com/alastairruhm/guidor/cmd/client/er"
 	"github.com/alastairruhm/guidor/src/schema"
-	logging "github.com/op/go-logging"
+	"github.com/apex/log"
 	"github.com/spf13/cobra"
+	"github.com/teambition/gear/logging"
 
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -23,8 +24,6 @@ var (
 	dbPort string
 	dbType string
 )
-
-var log = logging.MustGetLogger("guidor")
 
 func init() {
 	// Cmd.Flags().StringVarP(&ip, "ip", "", "", "guidor client ip")
@@ -58,7 +57,7 @@ func registerClient(cmd *cobra.Command, args []string) {
 
 	database, err := db.New(config)
 	if err != nil {
-		log.Error(err)
+		logging.Err(err)
 		return
 	}
 	// Check error of Close for db
@@ -72,15 +71,15 @@ func registerClient(cmd *cobra.Command, args []string) {
 	err = database.Auth()
 
 	if err != nil {
-		log.Error(er.ErrDBAuthentication)
+		logging.Err(er.ErrDBAuthentication)
 		return
 	}
-	log.Info("check database authentication success")
+	logging.Info("check database authentication success")
 
 	// collect database information
 	version, err := database.Version()
 	if err != nil {
-		log.Error(err)
+		logging.Err(err)
 		return
 	}
 	log.Info("check database version success")
@@ -96,10 +95,10 @@ func registerClient(cmd *cobra.Command, args []string) {
 	}
 	i, _, err := c.Databases.Register(ctx, d)
 	if err != nil {
-		log.Fatal(err)
+		logging.Fatal(err)
 		return
 	}
-	log.Infof("Token: %s", i.Token)
+	logging.Printf("Token: %s", i.Token)
 }
 
 // GetLocalIP returns the non loopback local IP of the host

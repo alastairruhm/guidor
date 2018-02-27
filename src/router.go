@@ -6,10 +6,6 @@ import (
 	"github.com/teambition/gear"
 )
 
-func noOp(ctx *gear.Context) error {
-	return gear.ErrNotFound.WithMsg("noOp")
-}
-
 func newRouter() (Router *gear.Router) {
 	Router = gear.NewRouter()
 

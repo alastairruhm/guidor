@@ -4,10 +4,8 @@ import (
 	"fmt"
 
 	"github.com/alastairruhm/guidor/cmd/client/er"
-	logging "github.com/op/go-logging"
+	"github.com/teambition/gear/logging"
 )
-
-var log = logging.MustGetLogger("guidor")
 
 // Base ...
 type Base interface {
@@ -44,7 +42,7 @@ func New(c Config) (Base, error) {
 			return nil, e
 		}
 	default:
-		log.Error(fmt.Errorf("databases config `type: %s`, but is not implement", c.Type))
+		logging.Err(fmt.Errorf("databases config `type: %s`, but is not implement", c.Type))
 		return nil, er.ErrNotSupported
 	}
 	return ctx, nil
