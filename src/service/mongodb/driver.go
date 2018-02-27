@@ -1,7 +1,7 @@
 package mongodb
 
 import (
-	"github.com/alastairruhm/guidor/src/logger"
+	"github.com/teambition/gear/logging"
 )
 
 // MaxPool max pool size
@@ -11,7 +11,7 @@ func init() {
 	MaxPool = 300
 
 	// init method to start db
-	logger.Info("check mongodb connection")
+	logging.Info("check mongodb connection")
 	checkAndInitServiceConnection()
 }
 
@@ -21,7 +21,7 @@ func checkAndInitServiceConnection() {
 		err := service.New()
 		if err != nil {
 			// logger.Err(err)
-			logger.Fatal(err)
+			logging.Fatal(err)
 		}
 	}
 }
