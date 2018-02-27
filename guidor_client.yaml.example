@@ -1,0 +1,7 @@
+user: root
+password: password!
+
+backup_user: backup_user
+backup_user: password!
+
+backup_dir:  /database/backup

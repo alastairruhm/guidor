@@ -165,7 +165,7 @@ func NewClient(httpClient *http.Client) *Client {
 // Opt are options for New.
 type Opt func(*Client) error
 
-// New returns a new DIgitalOcean API client instance.
+// New returns a new guidor API client instance.
 func New(httpClient *http.Client, opts ...Opt) (*Client, error) {
 	c := NewClient(httpClient)
 	for _, opt := range opts {
